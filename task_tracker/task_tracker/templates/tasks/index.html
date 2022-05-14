@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="">
+    <h1>Tasks</h1>
+    <menu>
+        <a type="button" class="btn btn-primary" href="{% url 'tasks:add_task' %}">Add Task</a> <br/>
+        <a type="button" class="btn btn-primary" href="{% url 'tasks:reassign_tasks' %}">(Re)Assign Tasks!</a>
+    </menu>
+    <ul>
+        {% for task in tasks %}
+            <li>
+                <a href="{% url 'tasks:detail' task.id %}">
+                    {{ task.public_id }} – {{ task.assignee.email }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

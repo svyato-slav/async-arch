@@ -1,0 +1,11 @@
+[tool.poetry]
+name = "auth"
+version = "0.1.0"
+description = ""
+authors = ["Svyat <life567@mail.ru>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = "3.2.13"
+django-oauth-toolkit = "1.5.0"
+pika = "^1.2.1"
