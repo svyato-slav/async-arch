@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.core.exceptions import ValidationError
 
 from . import producer
 
@@ -30,6 +31,7 @@ class Task(models.Model):
     reporter = models.ForeignKey(ExternalUser, on_delete=models.CASCADE, related_name='tasks_reported')
     assignee = models.ForeignKey(ExternalUser, on_delete=models.CASCADE, related_name='tasks_assigned', null=True)
     title = models.CharField(max_length=255)
+    jira_id = models.CharField(null=True, max_length=64)
     description = models.TextField()
     status = models.CharField(max_length=32, choices=STATUS_CHOICES, default=STATUS_NEW)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -51,12 +53,16 @@ class Task(models.Model):
             task.save()
 
     def save(self, *args, **kwargs):
+        if '[' in self.title or ']' in self.title:
+            raise ValidationError('jira-id shouldn\'t be in title')
         if not self.id:
             event_data = {
                 'public_id': str(self.public_id),
                 'reporter': str(self.reporter.public_id),
                 'assignee': str(self.assignee.public_id) if self.assignee else None,
                 'description': self.description,
+                'title': self.title,
+                'jira_id': self.jira_id,
                 'status': self.status
             }
             producer.publish('task_created', event_data)
@@ -66,6 +72,8 @@ class Task(models.Model):
                 'reporter': str(self.reporter.public_id),
                 'assignee': str(self.assignee.public_id) if self.assignee else None,
                 'description': self.description,
+                'title': self.title,
+                'jira_id': self.jira_id,
                 'status': self.status
             }
             producer.publish('task_updated', event_data)

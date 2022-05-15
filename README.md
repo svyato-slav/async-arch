@@ -18,3 +18,15 @@ python task_tracker/manage.py runserver localhost:8010
 
 Run task tracker consumer:
 python task_tracker/consumer.py
+
+### ДЗ №3
+
+Миграция [jira-id] - Title:
+
+1. Добавить новую версию в schema
+2. Дописать новую логику в consumers
+3. Обновить код producer 
+4. Выполнить миграции БД и задеплоить 
+
+
+Chose json schema
