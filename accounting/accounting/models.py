@@ -50,7 +50,7 @@ class Task(models.Model):
         return f'#{self.id}: {self.status}'
 
 
-class AudiLog(models.Model):
+class AuditLog(models.Model):
     amount = models.SmallIntegerField()
     user = models.ForeignKey(ExternalUser, on_delete=models.CASCADE, related_name='audit_logs')
     description = models.TextField()
